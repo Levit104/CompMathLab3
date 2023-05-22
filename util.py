@@ -11,8 +11,8 @@ valid_function_id_params = (1, len(functions), False)
 valid_method_id_params = (1, len(methods), False)
 
 
-def get_steps():
-    return int(get_value('Введите кол-во шагов разбиения',
+def get_number_of_partitions():
+    return int(get_value('Введите кол-во разбиений',
                          *valid_steps_params,
                          add_validation=lambda n: int(n) % 2 == 0,
                          add_message='\nКол-во шагов должно быть чётным'))
@@ -50,7 +50,7 @@ def print_methods():
     print_dictionary('Методы', methods)
 
 
-def print_results(integral_value, steps, precision):
+def print_results(integral_value, number_of_partitions, precision):
     try:
         # 0.0001
         round_to = len(str(precision).split('.')[1])
@@ -59,4 +59,4 @@ def print_results(integral_value, steps, precision):
         round_to = int(str(precision).split('-')[1])
 
     print(f'\nЗначение интеграла: {round(integral_value, round_to)}'
-          f'\nТребуемое число шагов: {steps}')
+          f'\nТребуемое число разбиений: {number_of_partitions}')

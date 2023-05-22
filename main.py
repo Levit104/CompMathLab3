@@ -1,5 +1,5 @@
 from solver import solve_integral
-from util import get_function, get_limits, get_precision, get_steps, get_method, \
+from util import get_function, get_limits, get_precision, get_number_of_partitions, get_method, \
     print_functions, print_methods, print_results
 
 if __name__ == '__main__':
@@ -12,15 +12,15 @@ if __name__ == '__main__':
 
             lower_limit, upper_limit = get_limits()
             precision = get_precision()
-            # steps_default = get_steps()
-            steps_default = 4
+            # number_of_partitions_default = get_number_of_partitions()
+            number_of_partitions_default = 4
 
             print_methods()
             method, method_string = get_method()
 
             integral_value, steps = solve_integral(method, method_string,
                                                    function, lower_limit, upper_limit,
-                                                   steps_default, precision)
+                                                   number_of_partitions_default, precision)
 
             print_results(integral_value, steps, precision)
         except (EOFError, KeyboardInterrupt):

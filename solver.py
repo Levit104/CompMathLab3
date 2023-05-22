@@ -1,5 +1,5 @@
 def solve_integral(method, method_string, f, a, b, n, eps, print_info=True):
-    if method_string in ['Метод Симсона']:
+    if method_string in ['Метод Симпсона']:
         k = 4
     elif method_string in ['Метод трапеций', 'Метод средних прямоугольников']:
         k = 2
@@ -15,12 +15,16 @@ def solve_integral(method, method_string, f, a, b, n, eps, print_info=True):
         runge_check = abs(i1 - i0) / (2 ** k - 1)
 
         if print_info:
-            print(f'\nN = {int(n / 2)} * 2 = {n}'
+            print(f'\nN = {int(n / 2)} * 2 = {n}, '
+                  f'\nk = {k}'
                   f'\n|I1 - I0| / (2^k - 1) = |({i1}) - ({i0})| / {2 ** k - 1} = {runge_check}')
 
         if runge_check <= eps:
             break
 
         i0 = i1
+
+    if i0 == i1:
+        n = int(n / 2)
 
     return i1, n
