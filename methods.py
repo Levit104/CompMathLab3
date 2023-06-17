@@ -2,20 +2,22 @@ from functions import Function
 
 
 class Method:
-    k = 0
+    k: int
 
-    def solve(self, f: Function, a, b, n, h) -> float:
+    def solve(self, f: Function, a: float, b: float, n: int, h: float) -> float:
         pass
 
-    def __call__(self, f: Function, a, b, n, eps, print_info=True):
-        h = (b - a) / n
-        i0 = self.solve(f, a, b, n, h)
+    def __call__(self, f: Function, a: float, b: float, n: int, eps: float,
+                 print_info: bool = True) -> tuple[float, int]:
+        h: float = (b - a) / n
+        i0: float = self.solve(f, a, b, n, h)
 
         while True:
             n *= 2
             h = (b - a) / n
-            i1 = self.solve(f, a, b, n, h)
-            runge_check = abs(i1 - i0) / (2 ** self.k - 1)
+
+            i1: float = self.solve(f, a, b, n, h)
+            runge_check: float = abs(i1 - i0) / (2 ** self.k - 1)
 
             if print_info:
                 print(f'\nN = {int(n / 2)} * 2 = {n}'
@@ -90,5 +92,5 @@ methods: dict[int, Method] = {
     2: RightRectangles(),
     3: MiddleRectangles(),
     4: Trapezoid(),
-    5: Simpson(),
+    5: Simpson()
 }

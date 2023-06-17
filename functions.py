@@ -2,7 +2,7 @@ import math
 
 
 class Function:
-    def __call__(self, x):
+    def __call__(self, x: float) -> float:
         pass
 
 
