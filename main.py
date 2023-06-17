@@ -1,28 +1,11 @@
-from solver import solve_integral
-from util import get_function, get_limits, get_precision, get_number_of_partitions, get_method, \
-    print_functions, print_methods, print_results
+from util import get_data, print_results
 
 if __name__ == '__main__':
     while True:
         try:
-            print('\nЧтобы выйти из программы введите exit на любом этапе')
-
-            print_functions()
-            function, function_string = get_function()
-
-            lower_limit, upper_limit = get_limits()
-            precision = get_precision()
-            # number_of_partitions_default = get_number_of_partitions()
-            number_of_partitions_default = 4
-
-            print_methods()
-            method, method_string = get_method()
-
-            integral_value, steps = solve_integral(method, method_string,
-                                                   function, lower_limit, upper_limit,
-                                                   number_of_partitions_default, precision)
-
-            print_results(integral_value, steps, precision)
+            method, function, a, b, n_default, eps = get_data()
+            integral_value, n = method(function, a, b, n_default, eps)
+            print_results(integral_value, n, eps)
         except (EOFError, KeyboardInterrupt):
             print("\nВыход из программы")
             break

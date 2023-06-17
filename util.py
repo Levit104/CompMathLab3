@@ -1,62 +1,67 @@
-from console import get_value, print_dictionary
 from functions import functions
 from methods import methods
 
-"""Функции-обёртки, можно обойтись и без них, сделаны для удобства"""
 
-valid_steps_params = (1, float('inf'), True)
-valid_precision_params = (0, 1, True)
-valid_interval_params = (float('-inf'), float('inf'), True)
-valid_function_id_params = (1, len(functions), False)
-valid_method_id_params = (1, len(methods), False)
+def get_data():
+    print('\nЧтобы выйти из программы введите exit на любом этапе')
 
+    n_default = 4
 
-def get_number_of_partitions():
-    return int(get_value('Введите кол-во разбиений',
-                         *valid_steps_params,
-                         add_validation=lambda n: int(n) % 2 == 0,
-                         add_message='\nКол-во шагов должно быть чётным'))
-
-
-def get_precision():
-    return float(get_value('Введите точность', *valid_precision_params))
-
-
-def get_limits():
-    lower_limit = get_value('Введите нижний предел интегрирования',
-                            *valid_interval_params)
-    upper_limit = get_value('Введите верхний предел интегрирования',
-                            *valid_interval_params,
-                            add_validation=lambda l: l > lower_limit,
-                            add_message='\nВерхняя граница должна быть больше нижней')
-    return float(lower_limit), float(upper_limit)
-
-
-def get_function():
-    function_id = int(get_value('Выберите функцию', *valid_function_id_params))
-    return functions[function_id]
-
-
-def get_method():
-    method_id = int(get_value('Выберите метод', *valid_method_id_params))
-    return methods[method_id]
-
-
-def print_functions():
     print_dictionary('Подынтегральные функции', functions)
+    function_id = int(get_value('Выберите функцию', min_value=1, max_value=len(functions), strict=False))
+    function = functions[function_id]
 
+    a = get_value('Введите нижний предел интегрирования')
+    b = get_value('Введите верхний предел интегрирования', min_value=a,
+                  invalid_message='Верхняя граница должна быть больше нижней')
 
-def print_methods():
+    eps = get_value('Введите точность')
+
     print_dictionary('Методы', methods)
+    method_id = int(get_value('Выберите метод', min_value=1, max_value=len(methods), strict=False))
+    method = methods[method_id]
+
+    return method, function, a, b, n_default, eps
 
 
-def print_results(integral_value, number_of_partitions, precision):
+def print_results(integral_value, n, eps):
     try:
         # 0.0001
-        round_to = len(str(precision).split('.')[1])
+        round_to = len(str(eps).split('.')[1])
     except IndexError:
         # 1e-05
-        round_to = int(str(precision).split('-')[1])
+        round_to = int(str(eps).split('-')[1])
 
     print(f'\nЗначение интеграла: {round(integral_value, round_to)}'
-          f'\nТребуемое число разбиений: {number_of_partitions}')
+          f'\nТребуемое число разбиений: {n}')
+
+
+def valid_value(value, min_value, max_value, strict):
+    if value == 'exit':
+        raise KeyboardInterrupt
+    try:
+        if strict:
+            return min_value < float(value) < max_value
+        else:
+            return min_value <= float(value) <= max_value
+    except ValueError:
+        return False
+
+
+def get_value(description='Введите значение',
+              min_value=float('-inf'), max_value=float('inf'), strict=True,
+              invalid_message='Невалидное значение'):
+    value = input(f'\n{description}: ').strip().replace(',', '.')
+
+    while not valid_value(value, min_value, max_value, strict):
+        print(invalid_message)
+        value = input('Повторите ввод: ').strip().replace(',', '.')
+
+    return float(value)
+
+
+def print_dictionary(name, dictionary):
+    print(f'\n{name}:', end='')
+    for key, value in dictionary.items():
+        print(f'\n\t{key}. {value}', end='')
+    print()
