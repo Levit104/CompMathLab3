@@ -4,10 +4,8 @@ from functions import functions, Function
 from methods import methods, Method
 
 
-def get_data() -> tuple[Method, Function, float, float, int, float]:
+def get_data() -> tuple[Method, Function, float, float, float]:
     print('\nЧтобы выйти из программы введите exit на любом этапе')
-
-    n_default: int = 4
 
     print_dictionary('Подынтегральные функции', functions)
     function_id: int = int(get_value('Выберите функцию', min_value=1, max_value=len(functions), strict=False))
@@ -23,31 +21,14 @@ def get_data() -> tuple[Method, Function, float, float, int, float]:
     method_id: int = int(get_value('Выберите метод', min_value=1, max_value=len(methods), strict=False))
     method: Method = methods[method_id]
 
-    return method, function, a, b, n_default, eps
+    return method, function, a, b, eps
 
 
-def print_results(integral_value: float, n: int, eps: float) -> None:
-    try:
-        # 0.0001
-        round_to: int = len(str(eps).split('.')[1])
-    except IndexError:
-        # 1e-05
-        round_to = int(str(eps).split('-')[1])
-
-    print(f'\nЗначение интеграла: {round(integral_value, round_to)}'
-          f'\nТребуемое число разбиений: {n}')
-
-
-def valid_value(value: str, min_value: float, max_value: float, strict: bool) -> bool:
-    if value == 'exit':
-        raise KeyboardInterrupt
-    try:
-        if strict:
-            return min_value < float(value) < max_value
-        else:
-            return min_value <= float(value) <= max_value
-    except ValueError:
-        return False
+def print_dictionary(name: str, dictionary: dict[Any, Any]) -> None:
+    print(f'\n{name}:', end='')
+    for key, value in dictionary.items():
+        print(f'\n\t{key}. {value}', end='')
+    print()
 
 
 def get_value(description: str = 'Введите значение',
@@ -64,8 +45,16 @@ def get_value(description: str = 'Введите значение',
     return float(value)
 
 
-def print_dictionary(name: str, dictionary: dict[Any, Any]) -> None:
-    print(f'\n{name}:', end='')
-    for key, value in dictionary.items():
-        print(f'\n\t{key}. {value}', end='')
-    print()
+def valid_value(value: str,
+                min_value: float = float('-inf'),
+                max_value: float = float('inf'),
+                strict: bool = True) -> bool:
+    if value == 'exit':
+        raise KeyboardInterrupt
+    try:
+        if strict:
+            return min_value < float(value) < max_value
+        else:
+            return min_value <= float(value) <= max_value
+    except ValueError:
+        return False

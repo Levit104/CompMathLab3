@@ -7,8 +7,13 @@ class Method:
     def solve(self, f: Function, a: float, b: float, n: int, h: float) -> float:
         pass
 
-    def __call__(self, f: Function, a: float, b: float, n: int, eps: float,
-                 print_info: bool = True) -> tuple[float, int]:
+    def __call__(self, f: Function,
+                 a: float,
+                 b: float,
+                 n: int,
+                 eps: float,
+                 float_format: str,
+                 print_info: bool) -> tuple[float, int]:
         h: float = (b - a) / n
         i0: float = self.solve(f, a, b, n, h)
 
@@ -21,7 +26,8 @@ class Method:
 
             if print_info:
                 print(f'\nN = {int(n / 2)} * 2 = {n}'
-                      f'\n|I1 - I0| / (2^k - 1) = |({i1}) - ({i0})| / {2 ** self.k - 1} = {runge_check}')
+                      f'\n|I1 - I0| / (2^k - 1) = |({i1:{float_format}}) - ({i0:{float_format}})| / {2 ** self.k - 1}'
+                      f' = {runge_check:{float_format}}')
 
             if runge_check <= eps:
                 break
